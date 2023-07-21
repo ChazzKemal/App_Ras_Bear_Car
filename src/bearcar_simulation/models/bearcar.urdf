@@ -1,0 +1,199 @@
+<?xml version="1.0" ?>
+<robot name="bearcar">
+
+  <link name="base_footprint"/>
+  <!-- The base footprint of the robot is located underneath the chassis -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.19"/>
+  </joint>
+  <!-- ********************** ROBOT BASE *********************************  -->
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.70 0.39 0.2"/>
+      </geometry>
+      <material name="Red">
+        <color rgba="1 0 0 0.5"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.70 0.39 0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- *********************** DRIVE WHEELS ******************************  -->
+  <link name="drivewhl_l_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+      <material name="White">
+        <color rgba="1 1 1 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Connect the wheels to the base_link at the appropriate location, and 
+         define a continuous joint to allow the wheels to freely rotate about
+         an axis -->
+  <joint name="drivewhl_l_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="drivewhl_l_link"/>
+    <origin rpy="0 0 0" xyz="-0.221 0.23 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  
+
+
+
+
+  <link name="drivewhl_r_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+      <material name="White">
+        <color rgba="1 1 1 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Connect the wheels to the base_link at the appropriate location, and 
+         define a continuous joint to allow the wheels to freely rotate about
+         an axis -->
+  <joint name="drivewhl_r_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="drivewhl_r_link"/>
+    <origin rpy="0 0 0" xyz="-0.221 -0.23 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+
+
+  <!--Front left wheel-->
+  <link name="front_l_axis_link"/>
+
+  <joint name="front_l_axis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_l_axis_link"/>
+    <origin rpy="0 0 0" xyz="0.221 0.23 -0.05"/>
+  </joint>
+
+
+  <link name="drivewhl_fl_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+      <material name="White">
+        <color rgba="1 1 1 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="drivewhl_fl_joint" type="continuous">
+    <parent link="front_l_axis_link"/>
+    <child link="drivewhl_fl_link"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!--Front right wheel-->
+  <link name="front_r_axis_link"/>
+
+  <joint name="front_r_axis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_r_axis_link"/>
+    <origin rpy="0 0 0" xyz="0.221 -0.23 -0.05"/>
+  </joint>
+
+
+  <link name="drivewhl_fr_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+      <material name="White">
+        <color rgba="1 1 1 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.14"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="drivewhl_fr_joint" type="continuous">
+    <parent link="front_r_axis_link"/>
+    <child link="drivewhl_fr_link"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.05"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+
+  <!-- *********************** IMU SETUP *********************************  -->
+  <!-- Each sensor must be attached to a link.                              -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin rpy="0 0 0" xyz="-0.10 0 0.05"/>
+  </joint>
+  <link name="imu_link"/>
+
+  <!-- *********************** LIDAR SETUP **********************************  -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin rpy="0 0 0" xyz="0.215 0 0.13"/>
+  </joint>
+  
+  <link name="lidar_link">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.18" radius="0.0508"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.18" radius="0.0508"/>
+      </geometry>
+      <material name="Black">
+        <color rgba="0 0 0 1.0"/>
+      </material>
+    </visual>
+  </link>
+</robot>
+
+
+
+

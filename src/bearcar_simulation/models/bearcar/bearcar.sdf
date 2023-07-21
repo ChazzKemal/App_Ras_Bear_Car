@@ -1,0 +1,586 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="bearcar">  
+  <static>false</static>
+
+  <!-- ****************** ROBOT BASE FOOTPRINT ***************************  -->
+  <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+  <link name="base_footprint"/>
+
+  <!-- ********************** ROBOT BASE *********************************  -->
+  <link name="base_link">
+
+    <collision name="base_collision">
+      <pose>0 0 0.1 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.70 0.39 0.20</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <visual name="base_visual">
+      <pose>0 0 0.1 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.70 0.39 0.20</size>
+        </box>
+      </geometry>
+      <material>
+        <ambient>1.0 0.0 0.0 1.0</ambient>
+        <diffuse>1.0 0.0 0.0 1.0</diffuse>
+        <specular>0.0 0.0 0.0 1.0</specular>
+        <emissive>0.0 0.0 0.0 1.0</emissive>
+      </material>
+    </visual>
+  </link>
+  <!-- ********************** CAMERA SETUP *********************************  -->
+      <link name="realsense_link">
+      <pose>0.3 0 0.10 0 0 0</pose>
+      <visual name="realsense_link_visual">
+        <pose>0 0 0 -1.57 0 -1.57</pose>
+        <geometry>
+        <box>
+          <size>0.05 0.02 0.02</size>
+        </box>
+        </geometry>
+      </visual>
+      <collision name="realsense_link_collision">
+        <pose>0 0 0 -1.57 0 -1.57</pose>
+        <geometry>
+          <box>
+            <size>0.02505 0.090 0.025</size>
+          </box>
+        </geometry>
+      </collision>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0.000</ixy>
+          <ixz>0.000</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0.000</iyz>
+          <izz>0.001</izz>
+        </inertia>
+        <mass>0.564</mass>
+      </inertial>
+
+      <sensor name="cameradepth" type="depth">
+        <camera name="camera">
+          <horizontal_fov>1.57</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>720</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.100</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <sensor name="cameracolor" type="camera">
+        <camera name="camera">
+          <horizontal_fov>1.57</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>720</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>1</visualize>
+      </sensor>
+      <sensor name="cameraired1" type="camera">
+        <camera name="camera">
+          <horizontal_fov>1.57</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>720</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.05</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>1</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <sensor name="cameraired2" type="camera">
+        <camera name="camera">
+          <horizontal_fov>1.57</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>720</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.05</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>1</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+    </link>
+
+    <joint name="realsense_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>realsense_link</child>
+      <pose>0.4 0 0.4 0 0 0</pose>
+    </joint>
+
+    <plugin name="camera" filename="librealsense_gazebo_plugin.so">
+      <prefix>camera</prefix>
+      <depthUpdateRate>1.0</depthUpdateRate>
+      <colorUpdateRate>1.0</colorUpdateRate>
+      <infraredUpdateRate>1.0</infraredUpdateRate>
+      <depthTopicName>aligned_depth_to_color/image_raw</depthTopicName>
+      <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+      <colorTopicName>color/image_raw</colorTopicName>
+      <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+      <infrared1TopicName>infra1/image_raw</infrared1TopicName>
+      <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+      <infrared2TopicName>infra2/image_raw</infrared2TopicName>
+      <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
+      <colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName>
+      <depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName>
+      <infrared1OpticalframeName>camera_left_ir_optical_frame</infrared1OpticalframeName>
+      <infrared2OpticalframeName>camera_right_ir_optical_frame</infrared2OpticalframeName>
+      <rangeMinDepth>0.3</rangeMinDepth>
+      <rangeMaxDepth>5.0</rangeMaxDepth>
+      <pointCloud>true</pointCloud>
+      <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+      <pointCloudCutoff>0.3</pointCloudCutoff>
+    </plugin>
+
+  <!-- *********************** IMU SENSOR SETUP **************************  -->
+  <link name="imu_link">
+    <gravity>true</gravity>
+    <sensor name="bmb_imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <imu>
+        <orientation>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </z>
+        </orientation>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+      </imu>
+      <plugin name="basic_mobile_bot_imu" filename="libgazebo_ros_imu_sensor.so">
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        <frame_name>imu_link</frame_name>
+        <ros>
+          <namespace>/imu</namespace>
+          <remapping>~/out:=data</remapping>
+        </ros>
+      </plugin>
+    </sensor>
+  </link>
+
+
+  <!-- ****************************** LIDAR *****************************    -->
+  <link name="lidar_link">    
+    <inertial>
+      <pose>0.215 0 0.13 0 0 0</pose>
+      <inertia>
+        <ixx>0.001</ixx>
+        <ixy>0.000</ixy>
+        <ixz>0.000</ixz>
+        <iyy>0.001</iyy>
+        <iyz>0.000</iyz>
+        <izz>0.001</izz>
+      </inertia>
+      <mass>0.114</mass>
+    </inertial>
+
+    <collision name="lidar_collision">
+      <pose>0.215 0 0.13 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.0508</radius>
+          <length>0.18</length>
+        </cylinder>
+      </geometry>
+    </collision>
+
+    <visual name="lidar_visual">
+      <pose>0.215 0 0.13 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.0508</radius>
+          <length>0.18</length>
+        </cylinder>
+      </geometry>
+      <material>
+        <ambient>0.0 0.0 0.0 1.0</ambient>
+        <diffuse>0.0 0.0 0.0 1.0</diffuse>
+        <specular>0.0 0.0 0.0 1.0</specular>
+        <emissive>0.0 0.0 0.0 1.0</emissive>
+      </material>
+    </visual>
+
+    <sensor name="lidar" type="ray">
+      <pose>0.215 0 0.215 0 0 0</pose>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>5</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1.000000</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>25.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=scan</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>lidar_link</frame_name>
+      </plugin>
+    </sensor>
+  </link>
+  
+  <!-- *********************** DRIVE WHEELS ******************************  -->
+  <link name="drivewhl_l_link">
+    <pose>-0.221 0.23 -0.05 0 1.570796 1.570796</pose>
+    
+    <collision name="drivewhl_l_collision">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </collision>
+
+    <visual name="drivewhl_l_visual">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="drivewhl_r_link">
+    <pose>-0.221 -0.23 -0.05 0 1.570796 1.570796</pose>
+    
+    <collision name="drivewhl_r_collision">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </collision>
+
+    <visual name="drivewhl_r_visual">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+  
+
+  <link name="drivewhl_fl_link">
+    <pose>0.221 0.23 -0.05 0 1.570796 1.570796</pose>
+    
+    <collision name="drivewhl_fl_collision">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </collision>
+
+    <visual name="drivewhl_fl_visual">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="drivewhl_fr_link">
+    <pose>0.221 -0.23 -0.05 0 1.570796 1.570796</pose>
+    
+    <collision name="drivewhl_fr_collision">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </collision>
+
+    <visual name="drivewhl_fr_visual">
+      <geometry>
+        <cylinder>
+          <radius>0.14</radius>
+          <length>0.06</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+  
+
+  <!-- ************************ JOINTS ***********************************  -->
+  <!-- Pose of the joint is the same as the child link frame -->
+  <!-- Axis is the axis of rotation relative to the child link frame -->
+  
+  <joint name="base_joint" type="fixed">
+    <parent>base_footprint</parent>
+    <child>base_link</child>
+    <pose>0 0 0 0 0 0</pose>
+  </joint>
+
+  <joint name="drivewhl_l_joint" type="revolute">
+    <parent>base_link</parent>
+    <child>drivewhl_l_link</child>
+    <pose>0 0 0 0 0 0</pose>
+    <axis>
+      <xyz>0 0 1</xyz>
+    </axis>
+  </joint>
+
+  <joint name="drivewhl_r_joint" type="revolute">
+    <parent>base_link</parent>
+    <child>drivewhl_r_link</child>
+    <pose>0 0 0 0 0 0</pose>
+    <axis>
+      <xyz>0 0 1</xyz>
+    </axis>
+  </joint>
+
+  <joint name="drivewhl_fr_joint" type="universal">
+    <parent>base_link</parent>
+    <child>drivewhl_fr_link</child>
+    <pose>0 0 0 0 0 0</pose>
+    <axis>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <!-- +- 50 degrees -->
+        <lower>-0.6</lower>
+        <upper>0.6</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>0 0 1</xyz>
+    </axis2>
+  </joint>
+
+  <joint name="drivewhl_fl_joint" type="universal">
+    <parent>base_link</parent>
+    <child>drivewhl_fl_link</child>
+    <pose>0 0 0 0 0 0</pose>
+    <axis>
+      <xyz>-1 0 0</xyz>
+      <limit>
+        <!-- +- 50 degrees -->
+        <lower>-0.6</lower>
+        <upper>0.6</upper>
+      </limit>
+    </axis>
+    <axis2>
+      <xyz>0 0 1</xyz>
+    </axis2>
+  </joint>
+
+
+  <joint name="imu_joint" type="fixed">
+    <parent>base_link</parent>
+    <child>imu_link</child>
+    <pose>0 0 0 0 0 0</pose>
+  </joint>  
+  
+  <joint name="lidar_joint" type="fixed">
+    <parent>base_link</parent>
+    <child>lidar_link</child>
+    <pose>0 0 0 0 0 0</pose>
+  </joint>
+
+ <!-- *********************** WHEEL ODOMETRY ***************************    -->
+  <plugin name="ackermann_drive" filename="libgazebo_ros_ackermann_drive.so">
+
+    <!-- Change the ROS topic we will publish the odometry data to -->
+    <ros>
+      <remapping>cmd_vel:=cmd_ack_vel</remapping>
+      <remapping>odom:=wheel/odometry</remapping>
+    </ros> 
+
+    <update_rate>30</update_rate>
+
+    <!-- wheels -->
+    <front_left_joint>drivewhl_fl_joint</front_left_joint>
+    <front_right_joint>drivewhl_fr_joint</front_right_joint>
+    <rear_left_joint>drivewhl_l_joint</rear_left_joint>
+    <rear_right_joint>drivewhl_r_joint</rear_right_joint>
+    <left_steering_joint>drivewhl_fl_joint</left_steering_joint>
+    <right_steering_joint>drivewhl_fr_joint</right_steering_joint>
+
+    <max_steer>0.5</max_steer>
+
+    <!-- kinematics -->
+  
+
+    <!-- limits -->
+    <max_speed>5</max_speed>
+
+      <!-- PID tuning -->
+    <left_steering_pid_gain>100 0 5</left_steering_pid_gain>
+    <left_steering_i_range>0 0</left_steering_i_range>
+    <right_steering_pid_gain>100 0 5</right_steering_pid_gain>
+    <right_steering_i_range>0 0</right_steering_i_range>
+    <linear_velocity_pid_gain>100 0 5</linear_velocity_pid_gain>
+    <linear_velocity_i_range>0 0</linear_velocity_i_range>
+
+
+
+    <!-- Receive velocity commands on this ROS topic -->
+    <command_topic>cmd_vel</command_topic>
+
+    <!-- output -->
+    <!-- When false, publish no wheel odometry data to a ROS topic -->
+    <publish_odom>true</publish_odom>
+
+    <!-- When true, publish coordinate transform from odom to base_footprint -->
+    <!-- I usually use the robot_localization package to publish this transform -->   
+    <publish_odom_tf>false</publish_odom_tf>
+    
+    <!-- When true, publish coordinate transform from base_link to the wheels -->
+    <!-- The robot_state_publisher package is often used to publish this transform -->   
+    <publish_wheel_tf>true</publish_wheel_tf>
+
+    
+
+    <odometry_topic>odom</odometry_topic>
+    <odometry_frame>odom</odometry_frame>
+    <robot_base_frame>base_footprint</robot_base_frame>
+
+
+
+
+  </plugin>
+
+ <!-- *********************** JOINT STATE PUBLISHER *********************   -->
+  <!--
+  <plugin name="basic_mobile_bot_joint_state" filename="libgazebo_ros_joint_state_publisher.so">
+    <ros>
+      <remapping>~/out:=joint_states</remapping>
+    </ros>
+    <update_rate>30</update_rate>
+    <joint_name>drivewhl_l_joint</joint_name>
+    <joint_name>drivewhl_r_joint</joint_name>
+  </plugin> -->
+  
+  </model>
+</sdf>

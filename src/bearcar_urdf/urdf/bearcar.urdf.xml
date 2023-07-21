@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot name="bearcar">
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.12 0 0.05" />
+      		<geometry>
+        		<box size="0.35 0.17 0.20"/>
+      		</geometry>
+    </visual>
+  </link>
+	<link name="laser">
+    	<visual>
+      		<geometry>
+        		<box size="0.05 0.04 0.04"/>
+      		</geometry>
+    	</visual>
+  </link>
+  <link name="D455_link">
+    	<visual>
+      		<geometry>
+        		<box size="0.01 0.08 0.05"/>
+      		</geometry>
+    	</visual>
+  </link>
+  <joint name="base_of_lidar" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser"/>
+    <origin xyz="-0.07 0 0.17" />
+  </joint>
+  <joint name="base_of_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="D455_link"/>
+    <origin xyz="-0.29 0 0.10" />
+  </joint>
+
+</robot>
