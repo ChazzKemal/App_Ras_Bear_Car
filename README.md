@@ -1,5 +1,6 @@
 # app-ras-group1
 GitHub repository for group 1 of the study field APP-RAS at the Technical University of Berlin.
+![image](https://github.com/ChazzKemal/app-ras-bear-car/assets/71472091/70af0a26-2298-4574-98ce-860a337c2e8e)
 
 
 ## Bearcar Simulation
